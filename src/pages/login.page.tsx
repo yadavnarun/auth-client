@@ -25,14 +25,14 @@ function LoginPage() {
   } = useForm<CreateSessionInput>({
     resolver: zodResolver(createSessionSchema),
   });
-  let navigate = useNavigate();
+  // let navigate = useNavigate();
 
   async function onSubmit(values: CreateSessionInput) {
     try {
       await axios.post("/api/sessions", values, {
         withCredentials: true,
       });
-      navigate("/");
+      // navigate("/");
     } catch (e: any) {
       setLoginError(e.message);
     }

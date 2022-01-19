@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import { axios } from "../helpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { object, string, TypeOf } from "zod";
 import { useNavigate } from "react-router-dom";
 
 const createUserSchema = object({
-  name: string().nonempty({
-    message: "Name is required",
+  firstName: string().nonempty({
+    message: "First name is required",
+  }),
+  lastName: string().nonempty({
+    message: "Last name is required",
   }),
   password: string()
     .min(6, "Password too short - should be 6 chars minimum")
@@ -45,7 +48,7 @@ function RegisterPage() {
   async function onSubmit(values: CreateUserInput) {
     try {
       await axios.post("/api/users", values);
-      navigate("/login");
+      navigate("/verify");
     } catch (e: any) {
       setRegisterError(e.message);
     }
@@ -56,6 +59,28 @@ function RegisterPage() {
       <p>{registerError}</p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-element">
+          <label htmlFor="firstname">First Name</label>
+          <input
+            id="firstname"
+            type="text"
+            placeholder="jane"
+            {...register("firstName")}
+          />
+          <p>{errors.firstName?.message}</p>
+        </div>
+
+        <div className="form-element">
+          <label htmlFor="lastname">Last Name</label>
+          <input
+            id="lastname"
+            type="text"
+            placeholder="doe"
+            {...register("lastName")}
+          />
+          <p>{errors.lastName?.message}</p>
+        </div>
+
+        <div className="form-element">
           <label htmlFor="email">Email</label>
           <input
             id="email"
@@ -64,17 +89,6 @@ function RegisterPage() {
             {...register("email")}
           />
           <p>{errors.email?.message}</p>
-        </div>
-
-        <div className="form-element">
-          <label htmlFor="name">Name</label>
-          <input
-            id="name"
-            type="text"
-            placeholder="Jane Doe"
-            {...register("name")}
-          />
-          <p>{errors.name?.message}</p>
         </div>
 
         <div className="form-element">

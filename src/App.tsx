@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("/api/me", { withCredentials: true })
+      .get("/api/users/me", { withCredentials: true })
       .then((res: AxiosResponse<User, any>) => {
         userUpdate({ authenticated: true, user: { ...res.data } });
       })
